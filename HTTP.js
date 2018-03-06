@@ -122,3 +122,19 @@ function initJQueryAjaxCSRF() {
 		});
 	}
 }
+
+// 4、CSRF <input id='csrf_token' />
+export function initJQueryAjaxCSRF() {
+    // Works in conjunction with a Flask-WTF token as described here:
+    // http://flask-wtf.readthedocs.io/en/stable/csrf.html#javascript-requests
+    const token = $('input#csrf_token').val();
+    if (token) {
+        $.ajaxSetup({
+            beforeSend(xhr, settings) {
+                if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader('X-CSRFToken', token);
+                }
+            },
+        });
+    }
+}
