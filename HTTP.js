@@ -7,6 +7,7 @@ function fetch (url, http, data) {
         http.credentials = 'include';
         http.Cookie = userModel.getCookie();
     }
+
     if (data instanceof Object) {
         args = JSON.stringify(data);
     } else {
@@ -16,7 +17,12 @@ function fetch (url, http, data) {
     if (http.method === 'POST') {
         http.body = args; 
     } else {
-        url += '?' + args;
+        url = url + '?';
+        args = JSON.parse(args);
+        for (var i in args) {
+            url += i + '=' + args[i] + '&';
+        }
+        url = url.substring(0, url.length - 1);
     }
     return fetch(url, http);
 }
@@ -50,7 +56,7 @@ function _pfetch (url, method, params) {
 
 var request = [{
     url: '',
-    method: 'POST',
+    method: 'POST',  // or GET
     params: {}
 }];
 combine(request, function (data) {
