@@ -3,10 +3,8 @@
 // 1、fetch 同时发送多个请求 依次返回
 function fetch (url, http, data) {
     var args;
-    if (url.indexOf('house-sv-base') === -1) {
-        http.credentials = 'include';
-        http.Cookie = userModel.getCookie();
-    }
+    http.credentials = 'include';  // 是否携带cookie
+    http.Cookie = '';
 
     if (data instanceof Object) {
         args = JSON.stringify(data);
@@ -15,7 +13,7 @@ function fetch (url, http, data) {
     }
 
     if (http.method === 'POST') {
-        http.body = args; 
+        http.body = args;  // 参数
     } else {
         url = url + '?';
         args = JSON.parse(args);
@@ -194,3 +192,54 @@ export default {
         });
     }
 }
+
+
+// 6、axios
+import Axios from 'axios'
+import Vue from 'vue'
+
+let baseURL = mock ? '//10.0.118.50:9991' : `//activity.focus${window.env}.cn`
+
+// response拦截器
+Axios.interceptors.response.use(response => {
+    return response.data
+}, error => {
+    return Promise.reject(error)
+})
+
+let request = {
+    post(url, params) {
+        return Axios({
+            url: url,
+            method: 'post',
+            baseURL: baseURL,
+            data: params
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    get(url, params) {
+        return Axios({
+            url: url,
+            method: 'get',
+            baseURL: baseURL,
+            params: params
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    jsonp(url, params) {
+        return Vue.jsonp(url, params)
+    }
+}
+export default request
+
+// 返回promise对象
+request.get('/wap/getTaskList', {}).then(res => {
+    if (res.code == 200) {
+        this.listData = [].concat(res.data)
+        setTimeout(() => {
+            this.isLoading = false
+        }, 300)
+    }
+})
