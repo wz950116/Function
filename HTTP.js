@@ -110,24 +110,7 @@ const data = Object.assign({}, PARAM, {
 });
 jsonp(url, data, OPTION).then(res => {console.log(res)});
 
-
-// 3、HTTP Safe
-function initJQueryAjaxCSRF() {
-	// Works in conjunction with a Flask-WTF token as described here:
-	// http://flask-wtf.readthedocs.io/en/stable/csrf.html#javascript-requests
-	const token = $('input#csrf_token').val();
-	if (token) {
-		$.ajaxSetup({
-			beforeSend(xhr, settings) {
-				if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-					xhr.setRequestHeader('X-CSRFToken', token);
-				}
-			},
-		});
-	}
-}
-
-// 4、CSRF <input id='csrf_token' />
+// 3、CSRF <input id='csrf_token' />
 export function initJQueryAjaxCSRF() {
     // Works in conjunction with a Flask-WTF token as described here:
     // http://flask-wtf.readthedocs.io/en/stable/csrf.html#javascript-requests
@@ -143,7 +126,7 @@ export function initJQueryAjaxCSRF() {
     }
 }
 
-// 5、jQuery
+// 4、jQuery
 export default {
     post: function(params, callback) {
         $.ajax({
@@ -151,7 +134,10 @@ export default {
             type: 'POST',
             dataType: 'json',
             data: JSON.stringify(params.data),
-            contentType: 'application/json'
+            contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true,
+            },
         }).done(function(res) {
             callback && callback(res);
         }).fail(function() {
@@ -166,7 +152,10 @@ export default {
             type: 'GET',
             dataType: 'json',
             data: params.data,
-            contentType: 'application/json'
+            contentType: 'application/json',
+            xhrFields: {
+                withCredentials: true,
+            },
         }).done(function(res) {
             callback && callback(res);
         }).fail(function() {
@@ -194,7 +183,7 @@ export default {
 }
 
 
-// 6、axios
+// 5、axios
 import Axios from 'axios'
 import Vue from 'vue'
 
@@ -243,3 +232,21 @@ request.get('/wap/getTaskList', {}).then(res => {
         }, 300)
     }
 })
+
+// 6、XDomainRequest跨域请求
+// jQuery.XDomainRequest.min.js 是一个利用 XDomainRequest 对象为 IE8、IE9 实现跨域资源共享 为CORS做兼容
+// <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.3/jquery.xdomainrequest.min.js" type="text/javascript" charset="utf-8"></script>
+var iElm = $("#get-body");
+if ($.browser.msie && window.XDomainRequest) {
+    var xdr = new XDomainRequest();
+    xdr.open("GET", "//www.baidu.com/abc.html");
+    xdr.onload = function(ev) {
+        iElm.html(xdr.responseText);
+    }
+    xdr.onerror = function() {
+        window.location.reload();
+    }
+    xdr.ontimeout = function() {}
+    xdr.onprogress = function() {}
+    xdr.send();
+}
