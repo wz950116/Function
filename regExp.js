@@ -1,6 +1,6 @@
 // 判断环境
 var domain = window.location.host;
-var env = '111111111';
+var env = '';
 
 if ((/^\d+\.\d+\.\d+\.\d+/).test(domain) || (/^localhost/).test(domain)) {
 	// 本地开发走dev
