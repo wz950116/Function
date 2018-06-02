@@ -1,4 +1,5 @@
 import Es6Promise from 'es6-promise';
+import { getByJsonp } from './HTTP.js';
 
 const getLocationLatLon = (options) => {
 	let newOption = Object.assign({}, {
@@ -6,7 +7,7 @@ const getLocationLatLon = (options) => {
 		maximumAge: 3600000,
 		timeout: 1000
 	}, options);
-	
+
 	return new Es6Promise((resolve, reject) => {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition((position) => {
@@ -58,11 +59,14 @@ const getLocationLatLon = (options) => {
 	});
 };
 
-const getRealLocation = (options)=> {
-	return new Es6Promise ((reslove, reject) => {
+const getRealLocation = (options) => {
+	return new Es6Promise((reslove, reject) => {
 		getLocationLatLon().then(res => {
 			if (res && res.isGet === true) {
-				let { longitude, latitude } = res.data.position.coords;
+				let {
+					longitude,
+					latitude
+				} = res.data.position.coords;
 				let lonlat = longitude + ',' + latitude;
 				let result = getByJsonp(`http://apis.map.qq.com/jsapi?qt=rgeoc&lnglat=${lonlat}&key=FBOBZ-VODWU-C7SVF-B2BDI-UK3JE-YBFUS&pf=jsapi&ref=jsapi`);
 				result.then(res => {
