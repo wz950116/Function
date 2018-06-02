@@ -5,7 +5,6 @@ function toPercent() {
 	}
 }
 
-
 // 2、解决浮点数精度BUG（toFixed低版本ie不兼容BUG）
 
 /**
@@ -128,9 +127,3 @@ function accDiv(arg1, arg2) {
 Number.prototype.div = function(arg) {
 	return accDiv(this, arg);
 };
-
-
-// 3、随机生成安全色
-function getRandomColor() {
-    return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6); 
-}

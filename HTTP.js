@@ -1,3 +1,5 @@
+// HTTP请求 参数
+
 // 1、fetch 同时发送多个请求 依次返回
 function fetch (url, http, data) {
     var args;
@@ -62,7 +64,7 @@ combine(request, function (data) {
 });
 
 
-// 2、jsonp（模块）
+// 2、jsonp 封装
 import originJsonp from "jsonp";
 function buildUrl(url, data) {
     let params = [];
@@ -108,40 +110,6 @@ const data = Object.assign({}, PARAM, {
 });
 jsonp(url, data, OPTION).then(res => {console.log(res)});
 
-
-// 2、jsonp（原生）
-// 在页面中动态插入 script标签
-const loadScript = (url, func, clear = false) => {
-    let script = document.createElement('script')
-    let bodyEle = document.body
-    script.src = url
-    script.onload = script.onreadystatechange = function() {
-        if (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete') {
-            func && typeof func === 'function' && func()
-            clear ? bodyEle.removeChild(script) : (script.onload = script.onreadystatechange = null)
-        }
-    }
-    bodyEle.appendChild(script)
-}
-const selfJsonp = (url, callback, cb = 'cb') => {
-    let cbname = cb + new Date().getTime()
-    window[cbname] = (data) => {
-        callback(data)
-        delete window[cbname]
-    }
-    url += url.indexOf('?') === -1 ? '?' : '&'
-    url += (cb + '=' + cbname)
-    loadScript(url, null, true)
-}
-const getByJsonp = (url, cb='cb') => {
-    return new Promise((resolve, reject)=>{
-        selfJsonp(url, (data)=>{
-            resolve(data)
-        }, cb)
-    })
-}
-
-
 // 3、CSRF <input id='csrf_token' />
 export function initJQueryAjaxCSRF() {
     // Works in conjunction with a Flask-WTF token as described here:
@@ -157,7 +125,6 @@ export function initJQueryAjaxCSRF() {
         });
     }
 }
-
 
 // 4、jQuery
 export default {
@@ -265,7 +232,6 @@ request.get('/wap/getTaskList', {}).then(res => {
         }, 300)
     }
 })
-
 
 // 6、XDomainRequest跨域请求
 // jQuery.XDomainRequest.min.js 是一个利用 XDomainRequest 对象为 IE8、IE9 实现跨域资源共享 为CORS做兼容

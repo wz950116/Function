@@ -1,5 +1,4 @@
 import Es6Promise from 'es6-promise';
-import { getByJsonp } from './HTTP.js';
 
 const getLocationLatLon = (options) => {
 	let newOption = Object.assign({}, {
@@ -7,19 +6,14 @@ const getLocationLatLon = (options) => {
 		maximumAge: 3600000,
 		timeout: 1000
 	}, options);
-
+	
 	return new Es6Promise((resolve, reject) => {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition((position) => {
 				resolve({
 					isGet: true,
 					data: {
-						position: {
-							coords: {
-								longitude: '',
-								latitude: '',
-							}
-						}
+						position
 					}
 				})
 			}, (error) => {
@@ -64,8 +58,8 @@ const getLocationLatLon = (options) => {
 	});
 };
 
-const getRealLocation = (options) => {
-	return new Es6Promise((reslove, reject) => {
+const getRealLocation = (options)=> {
+	return new Es6Promise ((reslove, reject) => {
 		getLocationLatLon().then(res => {
 			if (res && res.isGet === true) {
 				let { longitude, latitude } = res.data.position.coords;
