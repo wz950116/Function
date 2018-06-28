@@ -45,3 +45,22 @@ module.exports = {
         return str.replace(tpm, '****');
     }
 }
+
+// 随机生成安全色
+function getRandomColor() {
+    return '#'+('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6); 
+}
+
+// RGB to HEX
+function zero_fill_hex(num, digits) {
+    var s = num.toString(16)
+    while (s.length < digits)
+        s = "0" + s
+    return s
+}
+function rgb2hex(rgb) {
+    if (rgb.charAt(0) == '#') return rgb
+    var ds = rgb.split(/\D+/)
+    var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3])
+    return "#" + zero_fill_hex(decimal, 6);
+}

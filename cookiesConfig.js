@@ -1,3 +1,4 @@
+// import Cookie from 'js-cookie'
 module.exports = {
     setCookie: function(c_name, value, expiredays) {
         var exdate = new Date()
