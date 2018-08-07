@@ -31,3 +31,8 @@ function getUrlParams (name) {
 	}
 }
 
+// 数字千分位化
+var str="1235987528";
+var re=/(?=(?!(\b))(\d{3})+$)/g;
+str=str.replace(re,",");
+alert(str);
