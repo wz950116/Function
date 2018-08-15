@@ -32,7 +32,23 @@ function getUrlParams (name) {
 }
 
 // 数字千分位化
-var str="1235987528";
-var re=/(?=(?!(\b))(\d{3})+$)/g;
-str=str.replace(re,",");
-alert(str);
+function hh(str){
+  if(/\./.test(str)){
+    return str.replace(/\d(?=(\d{3})+\.)/g, "$&,").replace(/\d{3}(?![,.]|$)/g, "$&,");
+  }else{
+    return str.replace(/\d(?=(\d{3})+$)/g, "$&,");
+  }
+}
+
+// yyyymmdd转日期格式yyyy-mm-dd
+function Toyyyy_MM_dd(setDate){
+    if(setDate.length == 8){
+        valDate=setDate.substring(0, 4) + "-" + setDate.substring(4, 6) + "-" + setDate.substring(6, 8);
+       return valDate;
+    }else if(setDate.length == 6){
+        valDate=setDate.substring(0, 4) + "-" + setDate.substring(4, 6);
+        return valDate;
+    } 
+    return valDate;
+}
+
