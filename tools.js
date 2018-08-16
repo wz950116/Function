@@ -64,3 +64,36 @@ function rgb2hex(rgb) {
     var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3])
     return "#" + zero_fill_hex(decimal, 6);
 }
+
+// 获取光标位置
+function getCursortPosition(textDom) {
+    var cursorPos = 0;
+    if (document.selection) {
+      // IE Support
+      textDom.focus();
+      var selectRange = document.selection.createRange();
+      selectRange.moveStart('character', -textDom.value.length);
+      cursorPos = selectRange.text.length;
+    } else if (textDom.selectionStart || textDom.selectionStart == '0') {
+      // Firefox support
+      cursorPos = textDom.selectionStart;
+    }
+    return cursorPos;
+}
+
+// 设置光标位置
+function setCaretPosition(textDom, pos) {
+    if (textDom.setSelectionRange) {
+      // IE Support
+      textDom.focus();
+      textDom.setSelectionRange(pos, pos);
+    } else if (textDom.createTextRange) {
+      // Firefox support
+      var range = textDom.createTextRange();
+      range.collapse(true);
+      range.moveEnd('character', pos);
+      range.moveStart('character', pos);
+      range.select();
+    }
+}
+setCaretPosition(document.getElementById('inp1'), 3)
