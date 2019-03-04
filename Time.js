@@ -103,3 +103,10 @@ export function lastMonthDate (num) {
         now.getFullYear() + '-' + (month < 10 ? ('0' + month) : month) + '-' + dayCount
     ];
 };
+
+// 6、获取某年某月的总天数
+function getDaysInOneMonth(year, month){
+    month = parseInt(month, 10);
+    var d= new Date(year, month, 0);
+    return d.getDate();
+}
