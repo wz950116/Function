@@ -99,6 +99,16 @@ function setCaretPosition(textDom, pos) {
 setCaretPosition(document.getElementById('inp1'), 3)
 
 // 全屏
+import screenfull from 'screenfull'
+if (!screenfull.enabled) {
+    this.$message({
+        message: '浏览器不支持',
+        type: 'warning'
+    })
+    return false
+}
+screenfull.toggle()
+
 function toggleFullScreen(elem) { 
     if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
         if (elem.requestFullScreen) {
@@ -125,7 +135,7 @@ function toggleFullScreen(elem) {
 
 // 数值显示动画
 $(element).each(function () {
-    $(this).prop('Counter',0).animate({
+    $(this).prop('Counter', 0).animate({
         Counter: $(this).text()
     }, {
         duration: 3000,
