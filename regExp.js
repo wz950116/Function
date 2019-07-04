@@ -19,8 +19,8 @@ if ((/^\d+\.\d+\.\d+\.\d+/).test(domain) || (/^localhost/).test(domain)) {
 
 // 获取url中指定参数值
 function getUrlParams (name) {
-	var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)'); // 构造一个含有目标参数的正则表达式对象
-	var r = window.location.search.substr(1).match(reg); // 匹配目标参数
+	var reg = new RegExp('(^|&|\\?)' + name + '=([^&]*)(&|$)'); // 构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr().match(reg); // 匹配目标参数
 	if (r != null) {
 		return unescape(r[2])
 	} else {
@@ -34,7 +34,7 @@ function hh(str){
   if (/\./.test(str)) {
     return str.replace(/\d(?=(\d{3})+\.)/g, "$&,").replace(/\d{3}(?![,.]|$)/g, "$&,");
   } else {
-    return str.replace(/\d(?=(\d{3})+$)/g, "$&,");
+    return str.replace(/\d(?=(\d{3})+$)/g, "$&,");  // ?= 前瞻3位数字
   }
 }
 
